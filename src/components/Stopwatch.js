@@ -4,6 +4,9 @@ import "../App.css";
 window.onbeforeunload = () => {
   localStorage.removeItem('mydata0');
   localStorage.removeItem('mydata1');
+  localStorage.removeItem('mydata2');
+  localStorage.removeItem('mydata3');
+
 }
 class Stopwatch extends Component {
   newcounter=0;
@@ -12,7 +15,7 @@ class Stopwatch extends Component {
     timerStart: 0,
     timerTime: 0,
     counter:0,
-    selectedOption:''
+    selectedOption:'kneeling chair 1'
 
   };
 
@@ -40,14 +43,7 @@ class Stopwatch extends Component {
     clearInterval(this.timer);
   };
 
-
-  resetTimer = () => {
-      var mycounter = this.state.counter +1;
-    this.setState({
-      timerStart: 0,
-      timerTime: 0,
-      counter:mycounter
-    });
+  saveSittingSession=() => {
     const { timerTime } = this.state;
     let centiseconds = ("0" + (Math.floor(timerTime / 10) % 100)).slice(-2);
     let seconds = ("0" + (Math.floor(timerTime / 1000) % 60)).slice(-2);
@@ -58,7 +54,17 @@ class Stopwatch extends Component {
     var data= this.state.selectedOption+" time: "+newtime;
     var datavar="mydata"+this.state.counter;
     localStorage.setItem(datavar, data);
+  }
 
+  resetTimer = () => {
+    var mycounter = this.state.counter +1;
+    this.setState({
+      timerStart: 0,
+      timerTime: 0,
+      counter:mycounter
+    });
+   
+    this.saveSittingSession();
 
 
   };
@@ -82,83 +88,86 @@ class Stopwatch extends Component {
     }
     return (
       <div className="Stopwatch">        
-
         <div className="history">{historysitting}</div>
+
         <div className="Stopwatch-header">Stopwatch</div>
         <div className="Stopwatch-display">
           {hours} : {minutes} : {seconds} : {centiseconds}
         </div>
-        {this.state.timerOn === false && this.state.timerTime === 0 && (
-          <button onClick={this.startTimer}>Start</button>
-        )}
-        {this.state.timerOn === true && (
-          <button onClick={this.stopTimer}>Stop</button>
-        )}
+       
+        <form>
+         
+
+          <div className="form-check">
+            <label>
+              <input
+                type="radio"
+                name="react-tips"
+                value="kneeling chair 1"
+                checked={this.state.selectedOption === "kneeling chair 1" || !this.state.selectedOption}
+                onChange={this.handleOptionChange}
+                className="form-check-input"
+              />
+              Kneeling chair 1
+            </label>
+          </div>
+
+          <div className="form-check">
+            <label>
+              <input
+                type="radio"
+                name="react-tips"
+                value="kneelingChair2"
+                checked={this.state.selectedOption === "kneelingChair2"}
+                onChange={this.handleOptionChange}
+                className="form-check-input"
+              />
+              Kneeling chair 2
+            </label>
+          </div>
+
+          <div className="form-check">
+            <label>
+              <input
+                type="radio"
+                name="react-tips"
+                value="standing"
+                checked={this.state.selectedOption === "standing"}
+                onChange={this.handleOptionChange}
+                className="form-check-input"
+              />
+              standing
+            </label>
+          </div>
+
+          <div className="form-check">
+            <label>
+              <input
+                type="radio"
+                name="react-tips"
+                value="moving"
+                checked={this.state.selectedOption === "moving"}
+                onChange={this.handleOptionChange}
+                className="form-check-input"
+              />
+              moving
+            </label>
+          </div>
+
+        </form>
+
+        <button onClick={this.startTimer}>Start</button>
+        <button onClick={this.stopTimer}>Stop</button>
+
         {this.state.timerOn === false && this.state.timerTime > 0 && (
-          <button onClick={this.startTimer}>Resume</button>
+
+        <button onClick={this.startTimer}>Resume</button>
         )}
+
         {this.state.timerOn === false && this.state.timerTime > 0 && (
-          <button onClick={this.resetTimer}>Reset</button>
+
+        <button onClick={this.resetTimer}>Reset</button>
         )}
-<form>
-
-<div className="form-check">
-  <label>
-    <input
-      type="radio"
-      name="react-tips"
-      value="kneeling chair 1"
-      checked={this.state.selectedOption === "kneeling chair 1"}
-      onChange={this.handleOptionChange}
-      className="form-check-input"
-    />
-Kneeling chair 1
-  </label>
-</div>
-
-<div className="form-check">
-  <label>
-    <input
-      type="radio"
-      name="react-tips"
-      value="kneelingChair2"
-      checked={this.state.selectedOption === "kneelingChair2"}
-      onChange={this.handleOptionChange}
-      className="form-check-input"
-    />
-    Kneeling chair 2
-  </label>
-</div>
-
-<div className="form-check">
-  <label>
-    <input
-      type="radio"
-      name="react-tips"
-      value="standing"
-      checked={this.state.selectedOption === "standing"}
-      onChange={this.handleOptionChange}
-      className="form-check-input"
-    />
-    standing
-  </label>
-</div>
-
-<div className="form-check">
-  <label>
-    <input
-      type="radio"
-      name="react-tips"
-      value="moving"
-      checked={this.state.selectedOption === "moving"}
-      onChange={this.handleOptionChange}
-      className="form-check-input"
-    />
-    moving
-  </label>
-</div>
-
-</form>
       </div>
       
     );
